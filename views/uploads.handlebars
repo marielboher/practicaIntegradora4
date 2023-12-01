@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/public/css/products.css" />
+    <title>Document</title>
+</head>
+<body>
+    <div class="container-forms">
+        <form id="uploadForm" target="_blank" action="/api/users/{{userId}}/documents" method="post" enctype="multipart/form-data">
+        <h2>Upload Files</h2>
+    
+        <label for="profileImage">Profile Image:</label>
+        <input type="file" name="profiles" id="profileImage" accept="image/*"><br>
+    
+        <label for="productImage">Product Image:</label>
+        <input type="file" name="products" id="productImage" accept="image/*"><br>
+    
+        <label for="document">Document:</label>
+        <input type="file" name="document" id="document" accept=".pdf,.doc,.docx"><br>
+    
+        <button type="submit" class="btn-uploads">Upload</button>
+    </form>
+    <div id="uploadMessage"></div>
+    
+    <form id="uploadPremiumForm" action="/api/users/{{userId}}/premium-documents" method="post" enctype="multipart/form-data">
+        <h2>Upload Premium Documents</h2>
+    
+        <label for="identificationDocument">Identification Document:</label>
+        <input type="file" name="identificationDocument" id="identificationDocument" accept="image/*,.pdf"><br>
+    
+        <label for="domicileProofDocument">Domicile Proof Document:</label>
+        <input type="file" name="domicileProofDocument" id="domicileProofDocument" accept="image/*,.pdf"><br>
+    
+        <label for="accountStatementDocument">Account Statement Document:</label>
+        <input type="file" name="accountStatementDocument" id="accountStatementDocument" accept="image/*,.pdf"><br>
+    
+        <button class="btn-uploads" type="submit">Upload</button>
+    </form>
+    <div id="uploadPremiumMessage"></div>
+    <form action="/api/users/premium/{{userId}}" method="post">
+        <div class="cont-div"><button class="btn-uploads"  type="submit">Become Premium</button></div>
+    </form>
+    </div>
+</body>
+</html>
