@@ -106,7 +106,7 @@ class UserController {
     } else {
       const customError = new CustomError({
         name: "Authorization Error",
-        message: "No autorizado", 
+        message: "No autorizado",
         code: EErrors.AUTHORIZATION_ERROR,
       });
       return next(customError);
@@ -142,29 +142,49 @@ class UserController {
     try {
       const userId = req.params.uid;
       const files = req.files;
-      const userUpdate = {};
+      const user = await userModel.findById(userId);
 
-      if (files.profiles) {
-        userUpdate.profileImage = files.profiles[0].path;
+      if (!user) {
+        return res.status(404).send("Usuario no encontrado.");
       }
 
-      if (files.products) {
-        userUpdate.productImage = files.products[0].path;
+      // Función auxiliar para agregar o actualizar un archivo en documentos
+      const addOrUpdateFile = (file, fileName) => {
+        const existingIndex = user.documents.findIndex(
+          (doc) => doc.name === fileName
+        );
+        const fileData = {
+          name: fileName,
+          reference: file.path,
+          status: "Uploaded",
+        };
+
+        if (existingIndex >= 0) {
+          user.documents[existingIndex] = fileData;
+        } else {
+          user.documents.push(fileData);
+        }
+      };
+
+      if (files.profileImage && files.profileImage.length > 0) {
+        addOrUpdateFile(files.profileImage[0], "profileImage");
+      }
+
+      if (files.productImage && files.productImage.length > 0) {
+        addOrUpdateFile(files.productImage[0], "productImage");
       }
 
       if (files.document) {
-        userUpdate.documents = files.document.map((doc) => ({
-          name: doc.originalname,
-          reference: doc.path,
-          status: "Uploaded",
-        }));
+        files.document.forEach((doc) => {
+          addOrUpdateFile(doc, doc.originalname);
+        });
       }
 
-      await userModel.findByIdAndUpdate(userId, userUpdate);
-
-      res.status(200).send("Files uploaded successfully.");
+      await user.save();
+      res.json({ message: "Files uploaded successfully." });
     } catch (error) {
-      res.status(500).send(error.message);
+      console.error("Error uploading files:", error);
+      res.status(500).send("Error interno del servidor.");
     }
   }
 
@@ -203,6 +223,8 @@ class UserController {
   }
 
   async uploadPremiumDocuments(req, res) {
+    console.log("uploadPremiumDocuments llamado", req.body);
+
     try {
       const userId = req.params.uid;
       const files = req.files;
@@ -253,7 +275,7 @@ class UserController {
       }
 
       await user.save();
-      res.status(200).send("Documentos premium cargados correctamente.");
+      res.json({ message: "Files uploaded successfully." });
     } catch (error) {
       console.error(error);
       res.status(500).send("Error interno del servidor.");

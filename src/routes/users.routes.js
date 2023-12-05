@@ -8,8 +8,8 @@ const usersRouter = Router();
 usersRouter.post(
   "/:uid/documents",
   uploadConfig.fields([
-    { name: "profiles", maxCount: 1 },
-    { name: "products", maxCount: 1 },
+    { name: "profileImage", maxCount: 1 },
+    { name: "productImage", maxCount: 1 },
     { name: "document", maxCount: 1 },
   ]),
   userController.uploadFiles

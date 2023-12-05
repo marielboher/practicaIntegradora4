@@ -7,9 +7,9 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let folder;
 
-    if (file.fieldname === "profiles") {
+    if (file.fieldname === "profileImage") {
       folder = path.join(__dirname, "/uploads/profiles");
-    } else if (file.fieldname === "products") {
+    } else if (file.fieldname === "productImage") {
       folder = path.join(__dirname, "/uploads/products");
     } else {
       folder = path.join(__dirname, "/uploads/documents");
