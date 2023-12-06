@@ -16,10 +16,7 @@ const userSchema = new mongoose.Schema({
   last_connection: Date,
   documents: [
     {
-      name: {
-        type: String,
-        unique: true,
-      },
+      name: String,
       reference: String,
       status: {
         type: String,

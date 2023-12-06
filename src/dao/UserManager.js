@@ -14,14 +14,27 @@ class UserManager {
     last_connection,
   }) {
     try {
+      console.log("Intentando agregar usuario con email:", email);
+
       const existingUser = await userModel.findOne({ email });
+      console.log("Usuario existente encontrado:", existingUser);
 
       if (existingUser) {
-        console.log("User already exists");
+        console.log("El usuario ya existe, no se puede crear uno nuevo");
         return null;
       }
 
       const hashedPassword = createHash(password);
+      console.log("Creando nuevo usuario con los siguientes datos:", {
+        first_name,
+        last_name,
+        email,
+        age,
+        role,
+        cart,
+        last_connection,
+      });
+
       const user = await userModel.create({
         first_name,
         last_name,
@@ -33,10 +46,10 @@ class UserManager {
         last_connection: new Date(),
       });
 
-      console.log("User added!", user);
+      console.log("Usuario agregado con éxito:", user);
       return user;
     } catch (error) {
-      console.error("Error adding user:", error);
+      console.error("Error al agregar usuario:", error);
       throw error;
     }
   }
